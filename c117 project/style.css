@@ -1,0 +1,18 @@
+body{
+    background-color: rgb(238, 172, 105);
+}
+
+#score{
+font-size: larger;
+margin-left: 90px;
+}
+
+#timer{
+    font-size: large;
+    float: right;
+    margin-right: 90px;
+}
+
+#sketchToBeDrawn{
+    color: floralwhite;
+}
