@@ -1,27 +1,18 @@
-body
-{
-  color: white;
-  background: #c0d3ff;
+body{
+    background-color: rgb(238, 172, 105);
 }
-span
-{
-  font-size: 30px;
+
+#score{
+font-size: larger;
+margin-left: 90px;
 }
-#camera , #result
-{
-  border: 2px dashed black;
-  width: 350px;
-  height: 300px; 
+
+#timer{
+    font-size: large;
+    float: right;
+    margin-right: 90px;
 }
-#result_emotion_name ,#result_emotion_name2  
-{
-  color: black;
-}
-.emotion_name
-{
-  font-size: 40px;
-}
-.emoji
-{
-  font-size:48px;
+
+#sketchToBeDrawn{
+    color: floralwhite;
 }
