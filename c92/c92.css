@@ -1,0 +1,36 @@
+body{
+    background-color: whitesmoke;
+    text-emphasis-color: white;
+}
+.login_div1 , .login_div2{
+    background:rgb(255, 255, 255);
+    text-decoration-color:white;
+    padding: 10px;
+    float: none;
+    border-radius: 15px;
+}
+#player1_name , #player2_name{
+    display: inline-block;
+    text-decoration-color: black;
+    margin-left: 20px;
+}
+#word
+{
+	width: 60%;
+    text-decoration-color: black;
+}
+#word_display{
+	letter-spacing: 5px;
+}
+#output{
+background: rgb(255, 255, 255);
+border-radius: 10px;
+border-top: 10px solid #ff0000;
+padding: 10px;
+float: none;
+text-decoration-color:black ;
+text-align: left;
+}
+title{
+    text-decoration-color: black;
+}
