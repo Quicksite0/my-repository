@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather</title>
+    <title>Weather Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            overflow: hidden; /* prevent body scroll, handle inside app */
+            overflow: hidden;
         }
 
         /* weather condition gradients */
@@ -27,16 +27,16 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* specific themes based on wmo codes */
-        .theme-clear { background: linear-gradient(-45deg, #ff7e5f, #feb47b, #ffcb8c); } /* sunny/orange */
-        .theme-cloudy { background: linear-gradient(-45deg, #bdc3c7, #2c3e50, #4ca1af); } /* grey/blue */
-        .theme-rain { background: linear-gradient(-45deg, #00416a, #799f0c, #2c3e50); } /* deep blue/greenish */
-        .theme-snow { background: linear-gradient(-45deg, #e6dada, #274046, #e6dada); } /* white/ice */
-        .theme-thunder { background: linear-gradient(-45deg, #141E30, #243B55, #485563); } /* dark */
-        .theme-fog { background: linear-gradient(-45deg, #3E5151, #DECBA4); } /* muted */
+        /* specific themes based on wmo codes - using only the provided themes */
+        .theme-clear { background: linear-gradient(-45deg, #ff7e5f, #feb47b, #ffcb8c); }
+        .theme-cloudy { background: linear-gradient(-45deg, #bdc3c7, #2c3e50, #4ca1af); }
+        .theme-rain { background: linear-gradient(-45deg, #00416a, #799f0c, #2c3e50); }
+        .theme-snow { background: linear-gradient(-45deg, #e6dada, #274046, #e6dada); }
+        .theme-thunder { background: linear-gradient(-45deg, #141E30, #243B55, #485563); }
+        .theme-fog { background: linear-gradient(-45deg, #3E5151, #DECBA4); }
         .theme-default { background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); }
 
-        /* glassmorphism utilities */
+        /* background glass effect */
         .glass {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(12px);
@@ -45,19 +45,15 @@
         }
         
         .glass-dark {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* custom scrollbar for sidebar */
-        .custom-scroll::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
+        /* custom scrollbar */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb {
             background-color: rgba(255,255,255,0.3);
             border-radius: 20px;
@@ -70,7 +66,6 @@
             border-top: 3px solid white;
             width: 24px;
             height: 24px;
-            -webkit-animation: spin 1s linear infinite; /* safari */
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
@@ -113,7 +108,7 @@
                         <div id="searchLoader" class="loader hidden" style="width: 16px; height: 16px; border-width: 2px;"></div>
                     </div>
                     <div id="searchResults" class="absolute top-full left-0 w-full glass-dark mt-2 rounded-xl overflow-hidden shadow-lg max-h-60 overflow-y-auto z-50">
-                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -132,17 +127,36 @@
                     <button id="saveCurrentLocBtn" class="p-2 rounded-full bg-blue-500/30 hover:bg-blue-500/50 transition flex items-center justify-center text-white text-xs" title="Save Current Location">
                         <i id="saveCurrentLocIcon" class="ph ph-bookmark-simple text-sm"></i>
                     </button>
-                    </div>
+                </div>
 
                 <div class="border-t border-white/10 my-2"></div>
-                <p class="text-xs font-semibold text-white/40 uppercase tracking-wider px-2 mb-2">My Saved Cities</p>
+                
+                <div class="flex items-center justify-between px-2 mb-2">
+                    <p class="text-xs font-semibold text-white/40 uppercase tracking-wider">My Saved Cities</p>
+                    <div class="relative group/tooltip">
+                        <button id="defaultCityInfoBtn" class="text-white/50 hover:text-white transition" title="Info about Default City">
+                             <i class="ph ph-info text-sm"></i>
+                        </button>
+                        <div id="defaultCityTooltip" class="absolute right-0 top-full mt-2 w-64 p-3 glass-dark rounded-xl shadow-lg z-50 hidden text-left text-xs">
+                            <button id="closeDefaultCityTooltip" class="absolute top-1 right-1 p-1 rounded-full hover:bg-white/10 transition" title="Close">
+                                <i class="ph ph-x text-sm text-white/70"></i>
+                            </button>
+                            <p class="pr-6 pt-1">
+                                This button (<i class="ph ph-star-four text-yellow-300 inline-block"></i>) sets the default city that loads when you first open the dashboard.
+                            </p>
+                            <p class="mt-2 text-white/50">
+                                Click 'X' to dismiss this message.
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
                 <div id="savedCitiesList" class="space-y-1">
                     <p class="text-sm text-white/50 text-center p-4" id="loadingCities">Loading saved cities...</p>
-                    </div>
+                </div>
             </div>
 
-            <div class="p-6 border-t border-white/10 glass-dark">
+            <div class="p-6 border-t border-white/10">
                 <div class="flex items-center justify-between">
                     <span class="text-sm font-medium text-white/80">Units</span>
                     <div class="flex bg-black/20 rounded-lg p-1">
@@ -162,16 +176,16 @@
                     <p id="mainDate" class="text-lg text-white/70 mt-2 font-light">--</p>
                 </div>
 
-            <div class="flex flex-col items-center"> 	
-                <div class="flex items-center justify-center gap-12">
-                <i id="weatherIcon" class="ph ph-sun text-[8rem] md:text-[10rem] drop-shadow-lg text-yellow-200"></i>
-                <div class="relative">
-                <span id="mainTemp" class="text-[6rem] md:text-[8rem] font-bold leading-none tracking-tighter">--</span>
-                <span class="text-3xl absolute top-4 -right-8">°</span>
+                <div class="flex flex-col items-center">    
+                    <div class="flex items-center justify-center gap-12">
+                        <i id="weatherIcon" class="ph ph-sun text-[8rem] md:text-[10rem] drop-shadow-lg text-yellow-200"></i>
+                        <div class="relative">
+                            <span id="mainTemp" class="text-[6rem] md:text-[8rem] font-bold leading-none tracking-tighter">--</span>
+                            <span class="text-3xl absolute top-4 -right-8">°</span>
+                        </div>
+                    </div>
+                    <p id="weatherDesc" class="text-2xl font-medium text-white/90 capitalize mt-2">--</p>
                 </div>
-                </div>
-                <p id="weatherDesc" class="text-2xl font-medium text-white/90 capitalize mt-2">--</p>
-            </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl mt-12">
                     <div class="glass-dark p-4 rounded-2xl flex flex-col items-center justify-center gap-1">
@@ -202,42 +216,41 @@
             </div>
         </main>
 
-        <div id="overlay" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden glass"></div>
+        <div id="overlay" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden"></div>
     </div>
 
-    <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    // --- firebase setup & globals ---
-    let db;
-    let auth;
-    let userId = null;
-    let isAuthReady = false;
-    // New: Check if running in the intended environment
-    const isLocalMode = typeof __firebase_config === 'undefined' || Object.keys(JSON.parse(__firebase_config)).length === 0;
-
-    // mandated global variables
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-weather-app';
-    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-    
-    // --- state management ---
-    const defaultCityData = { lat: 40.7128, lon: -74.0060, city: "New York", country: "USA" };
+    <script>
+    // city management
+    const defaultCityData = { lat: 40.7128, lon: -74.0060, city: "New York", country: "USA", id: "40.7128--74.0060" };
     const state = {
-        lat: defaultCityData.lat, // default: new york
-        lon: defaultCityData.lon,
-        city: defaultCityData.city,
-        country: defaultCityData.country,
-        unit: localStorage.getItem('weatherUnit') || 'c', // load unit from local storage
-        savedCities: [], // now dynamic, populated by firestore or localstorage
-        defaultCity: JSON.parse(localStorage.getItem('defaultCity')) || null, // new: load default city
-        currentLocation: null, // NEW: stores the last successfully detected location data
+        // use default city from storage, otherwise fallback to the hardcoded default
+        defaultCity: JSON.parse(localStorage.getItem('defaultCity')) || {
+            name: "New York",
+            lat: 40.7128,
+            lon: -74.0060,
+            country: "USA",
+            id: "40.7128--74.0060"
+        },
+        lat: 0, // will be set by initApp
+        lon: 0, // will be set by initApp
+        city: "", // will be set by initApp
+        country: "", // will be set by initApp
+        // load unit from local storage, default to 'c'
+        unit: localStorage.getItem('weatherUnit') || 'c', 
+        // load saved cities from local storage, default to empty array
+        savedCities: JSON.parse(localStorage.getItem('savedCities') || '[]'), 
+        currentLocation: null, // stores the last successfully detected location data
     };
+    
+    // set initial state from default city
+    state.lat = state.defaultCity.lat;
+    state.lon = state.defaultCity.lon;
+    state.city = state.defaultCity.name;
+    state.country = state.defaultCity.country;
 
-    // --- dom elements ---
+    //  dom elements
     const els = {
+        // main Display
         mainTemp: document.getElementById('mainTemp'),
         mainCity: document.getElementById('mainCity'),
         mainDate: document.getElementById('mainDate'),
@@ -248,6 +261,7 @@
         statVis: document.getElementById('statVis'),
         statFeels: document.getElementById('statFeels'),
         appBody: document.getElementById('appBody'),
+        // sidebar
         unitC: document.getElementById('unitC'),
         unitF: document.getElementById('unitF'),
         searchInput: document.getElementById('citySearch'),
@@ -255,34 +269,23 @@
         searchLoader: document.getElementById('searchLoader'),
         savedCitiesList: document.getElementById('savedCitiesList'),
         loadingCities: document.getElementById('loadingCities'),
+        // mobile ui
         sidebar: document.getElementById('sidebar'),
         menuBtn: document.getElementById('menuBtn'),
         closeMenu: document.getElementById('closeMenu'),
         overlay: document.getElementById('overlay'),
+        // location
         btnCurrentLoc: document.getElementById('btnCurrentLoc'),
         currentLocName: document.getElementById('currentLocName'),
-        // NEW: Current location favourite button elements
         saveCurrentLocBtn: document.getElementById('saveCurrentLocBtn'),
         saveCurrentLocIcon: document.getElementById('saveCurrentLocIcon'),
+        // default city tooltip
+        defaultCityInfoBtn: document.getElementById('defaultCityInfoBtn'),
+        defaultCityTooltip: document.getElementById('defaultCityTooltip'),
+        closeDefaultCityTooltip: document.getElementById('closeDefaultCityTooltip'),
     };
 
-    // Initialize unit buttons UI based on saved state
-    function initUnitUI() {
-        if (state.unit === 'f') {
-            els.unitF.classList.add('bg-white/20', 'shadow-sm', 'text-white');
-            els.unitF.classList.remove('text-white/50', 'hover:text-white');
-            els.unitC.classList.remove('bg-white/20', 'shadow-sm', 'text-white');
-            els.unitC.classList.add('text-white/50', 'hover:text-white');
-        } else {
-            els.unitC.classList.add('bg-white/20', 'shadow-sm', 'text-white');
-            els.unitC.classList.remove('text-white/50', 'hover:text-white');
-            els.unitF.classList.remove('bg-white/20', 'shadow-sm', 'text-white');
-            els.unitF.classList.add('text-white/50', 'hover:text-white');
-        }
-    }
-
-
-    // --- wmo weather codes mapping ---
+    // wmo weather codes mapping
     const weatherCodes = {
         0: { desc: "Clear Sky", icon: "ph-sun", theme: "theme-clear" },
         1: { desc: "Mainly Clear", icon: "ph-sun-dim", theme: "theme-clear" },
@@ -308,7 +311,23 @@
         99: { desc: "Heavy Thunderstorm", icon: "ph-cloud-lightning", theme: "theme-thunder" }
     };
 
-    // --- core functions ---
+    // core functions
+
+    function initUnitUI() {
+        // toggle active unit button classes based on state
+        const isF = state.unit === 'f';
+        const activeClasses = ['bg-white/20', 'shadow-sm', 'text-white'];
+        const inactiveClasses = ['text-white/50', 'hover:text-white'];
+        
+        [els.unitC, els.unitF].forEach(btn => {
+            const isActive = (btn.id === 'unitF' && isF) || (btn.id === 'unitC' && !isF);
+            btn.classList.toggle('bg-white/20', isActive);
+            btn.classList.toggle('shadow-sm', isActive);
+            btn.classList.toggle('text-white', isActive);
+            btn.classList.toggle('text-white/50', !isActive);
+            btn.classList.toggle('hover:text-white', !isActive);
+        });
+    }
 
     async function fetchWeather() {
         try {
@@ -317,22 +336,29 @@
             els.mainTemp.textContent = "--";
 
             // build url based on units
-            const unitParam = state.unit === 'f' ? '&temperature_unit=fahrenheit&wind_speed_unit=mph' : '&temperature_unit=celsius&wind_speed_unit=kmh';
+            const unitParam = state.unit === 'f' 
+                ? '&temperature_unit=fahrenheit&wind_speed_unit=mph' 
+                : '&temperature_unit=celsius&wind_speed_unit=kmh';
+            
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${state.lat}&longitude=${state.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&hourly=visibility${unitParam}&timezone=auto`;
             
             const response = await fetch(url);
+            if (!response.ok) throw new Error("Weather API fetch failed.");
+            
             const data = await response.json();
             
             updateUI(data);
         } catch (error) {
-            console.error("error fetching weather:", error);
-            els.mainCity.innerText = "fetch error";
+            console.error("Error fetching weather:", error);
+            els.mainCity.innerText = "Fetch Error";
+            els.mainTemp.textContent = "---";
         }
     }
 
     function updateUI(data) {
         const current = data.current;
-        const weatherInfo = weatherCodes[current.weather_code] || weatherCodes[0];
+        // fallback to the default 'Clear Sky' if code is unknown
+        const weatherInfo = weatherCodes[current.weather_code] || weatherCodes[0]; 
         
         // text updates
         els.mainCity.textContent = state.city;
@@ -346,26 +372,28 @@
         els.statFeels.textContent = `${Math.round(current.apparent_temperature)}°`;
         
         // visibility (taken from first hour as approximation)
-        const visMeters = data.hourly.visibility[0]; 
+        const visMeters = data.hourly.visibility[0] || 0; 
         const visKm = (visMeters / 1000).toFixed(1);
-        els.statVis.textContent = state.unit === 'f' ? `${(visKm * 0.621371).toFixed(1)} mi` : `${visKm} km`;
+        els.statVis.textContent = state.unit === 'f' 
+            ? `${(visKm * 0.621371).toFixed(1)} mi` 
+            : `${visKm} km`;
 
         // date
         const date = new Date();
         els.mainDate.textContent = date.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' });
 
         // visual theme update
-        els.weatherIcon.className = `ph ${weatherInfo.icon} text-[8rem] md:text-[10rem] my-4 drop-shadow-lg ${current.is_day ? 'text-yellow-200' : 'text-blue-200'}`;
+        els.weatherIcon.className = `ph ${weatherInfo.icon} text-[8rem] md:text-[10rem] drop-shadow-lg ${current.is_day ? 'text-yellow-200' : 'text-blue-200'}`;
         
-        // remove old theme classes and add new one
+        // new theme classes
         els.appBody.className = els.appBody.className.replace(/theme-\w+/g, '');
         els.appBody.classList.add(weatherInfo.theme, 'weather-bg', 'h-screen', 'w-full', 'text-white', 'overflow-hidden', 'relative');
 
-        // NEW: Update current location button state after successful weather fetch
+        // update current location favourite button state
         updateCurrentLocBtnState();
     }
 
-    // --- geocoding & search (unchanged) ---
+    // geocoding & search
 
     async function searchCities(query) {
         els.searchResults.classList.add('hidden');
@@ -383,8 +411,7 @@
 
             renderSearchResults(data.results || []);
         } catch (e) {
-            console.error("geocoding failed:", e);
-            // optionally show a message in results
+            console.error("Geocoding failed:", e);
         } finally {
             els.searchLoader.classList.add('hidden');
         }
@@ -400,39 +427,42 @@
         els.searchResults.classList.remove('hidden');
         
         results.forEach(city => {
+            // generate a unique ID for local storage
+            const cityId = `${city.latitude.toFixed(4)}-${city.longitude.toFixed(4)}`; 
             const cityData = {
                 name: city.name,
                 lat: city.latitude,
                 lon: city.longitude,
                 country: city.country,
-                admin1: city.admin1
+                admin1: city.admin1,
+                id: cityId 
             };
 
-            // check if city is currently saved to determine button icon
-            const isSaved = state.savedCities.some(c => c.lat === cityData.lat && c.lon === cityData.lon);
-
-            // fix: create a selector-safe id by replacing periods with underscores
-            const safeLat = cityData.lat.toString().replace(/\./g, '_');
-            const safeLon = cityData.lon.toString().replace(/\./g, '_');
-            const saveButtonId = `save-${safeLat}-${safeLon}`; // use safe id
+            const isSaved = state.savedCities.some(c => c.id === cityData.id);
 
             const div = document.createElement('div');
             div.className = "p-3 hover:bg-white/10 cursor-pointer border-b border-white/5 last:border-0 flex justify-between items-center";
             div.innerHTML = `
-                <div onclick="selectLocation('${cityData.name.replace(/'/g, "\\'")}', ${cityData.lat}, ${cityData.lon}, '${cityData.country.replace(/'/g, "\\'")}', true);" class="flex flex-col flex-1">
+                <div class="flex flex-col flex-1" data-id="${cityId}" data-lat="${cityData.lat}" data-lon="${cityData.lon}" data-name="${cityData.name}" data-country="${cityData.country}">
                     <span class="font-medium text-sm">${cityData.name}</span>
                     <span class="text-xs text-white/50">${cityData.admin1 || ''}, ${cityData.country}</span>
                 </div>
-                <button id="${saveButtonId}" class="ml-4 p-2 rounded-full bg-blue-500/30 hover:bg-blue-500/50 transition flex items-center justify-center text-white text-xs" title="${isSaved ? 'City Already Saved' : 'Save City'}" ${isSaved ? 'disabled' : ''}>
+                <button class="save-search-btn ml-4 p-2 rounded-full bg-blue-500/30 transition flex items-center justify-center text-white text-xs ${isSaved ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-500/50'}" title="${isSaved ? 'City Already Saved' : 'Save City'}" ${isSaved ? 'disabled' : ''}>
                     <i class="ph ph-bookmark-simple text-sm"></i>
                 </button>
             `;
 
-            // add event listener for the save button using the safe id
-            const saveBtn = div.querySelector(`#${saveButtonId}`);
+            // attach event listener to the selectable area
+            div.querySelector('div').addEventListener('click', (e) => {
+                const target = e.currentTarget;
+                selectLocation(target.dataset.name, parseFloat(target.dataset.lat), parseFloat(target.dataset.lon), target.dataset.country);
+            });
+
+            // attach event listener to the save button
+            const saveBtn = div.querySelector('.save-search-btn');
             if (saveBtn && !isSaved) {
                 saveBtn.addEventListener('click', () => {
-                    saveCityToFirestore(cityData);
+                    saveCity(cityData);
                     els.searchResults.classList.add('hidden');
                     els.searchInput.value = '';
                     toggleMenu(false);
@@ -452,56 +482,30 @@
         if (closeMenu) toggleMenu(false);
     }
 
-    // --- location services (updated) ---
+    // location services
 
-    // NEW: Function to check if the current location is saved
     function isCurrentLocSaved() {
         if (!state.currentLocation) return false;
-        return state.savedCities.some(
-            c => c.lat === state.currentLocation.lat && c.lon === state.currentLocation.lon
-        );
+        const currentId = `${state.currentLocation.lat.toFixed(4)}-${state.currentLocation.lon.toFixed(4)}`;
+        return state.savedCities.some(c => c.id === currentId);
     }
 
-    // NEW: Function to update the appearance of the current location favorite button
     function updateCurrentLocBtnState() {
         if (!state.currentLocation) {
-             // Hide the button if location hasn't been successfully retrieved yet
             els.saveCurrentLocBtn.style.display = 'none'; 
             return;
         }
 
-        els.saveCurrentLocBtn.style.display = 'flex'; // Show the button
-        els.saveCurrentLocBtn.disabled = isCurrentLocSaved();
+        els.saveCurrentLocBtn.style.display = 'flex';
+        const saved = isCurrentLocSaved();
+        els.saveCurrentLocBtn.disabled = saved;
         
-        if (isCurrentLocSaved()) {
-            els.saveCurrentLocIcon.classList.remove('ph-bookmark-simple');
-            els.saveCurrentLocIcon.classList.add('ph-bookmark-fill');
-            els.saveCurrentLocBtn.title = 'Current Location Saved';
-            els.saveCurrentLocBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            els.saveCurrentLocBtn.classList.remove('hover:bg-blue-500/50');
-        } else {
-            els.saveCurrentLocIcon.classList.add('ph-bookmark-simple');
-            els.saveCurrentLocIcon.classList.remove('ph-bookmark-fill');
-            els.saveCurrentLocBtn.title = 'Save Current Location';
-            els.saveCurrentLocBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            els.saveCurrentLocBtn.classList.add('hover:bg-blue-500/50');
-        }
-    }
-
-    // NEW: Function to save the current location data
-    function saveCurrentLocation() {
-        if (!state.currentLocation) {
-            console.warn("Cannot save current location: location data not available.");
-            return;
-        }
-        if (isCurrentLocSaved()) {
-            console.log("Current location is already saved.");
-            return;
-        }
-
-        // Create a copy of the current location data
-        const cityData = { ...state.currentLocation };
-        saveCityToFirestore(cityData);
+        els.saveCurrentLocIcon.classList.toggle('ph-bookmark-fill', saved);
+        els.saveCurrentLocIcon.classList.toggle('ph-bookmark-simple', !saved);
+        els.saveCurrentLocBtn.title = saved ? 'Current Location Saved' : 'Save Current Location';
+        els.saveCurrentLocBtn.classList.toggle('opacity-50', saved);
+        els.saveCurrentLocBtn.classList.toggle('cursor-not-allowed', saved);
+        els.saveCurrentLocBtn.classList.toggle('hover:bg-blue-500/50', !saved);
     }
 
     function handleCurrentLocation() {
@@ -509,8 +513,8 @@
         
         if (!navigator.geolocation) {
             els.currentLocName.textContent = "not supported";
-            console.error("geolocation is not supported by your browser");
-            state.currentLocation = null; // Reset state
+            console.error("Geolocation is not supported by your browser");
+            state.currentLocation = null;
             updateCurrentLocBtnState();
             return;
         }
@@ -526,12 +530,15 @@
                 const cityName = data.locality || data.city || "My Location";
                 els.currentLocName.textContent = cityName;
                 
-                // Update state.currentLocation with the detected data
+                const currentId = `${latitude.toFixed(4)}-${longitude.toFixed(4)}`;
+                
+                // update state.currentLocation
                 state.currentLocation = {
                     name: cityName,
                     lat: latitude,
                     lon: longitude,
-                    country: data.countryName
+                    country: data.countryName,
+                    id: currentId
                 };
 
                 selectLocation(cityName, latitude, longitude, data.countryName);
@@ -539,303 +546,231 @@
             } catch (e) {
                 // fallback if reverse geo fails
                 const fallbackName = "Current Location";
+                const currentId = `${latitude.toFixed(4)}-${longitude.toFixed(4)}`;
                 state.currentLocation = {
                     name: fallbackName,
                     lat: latitude,
                     lon: longitude,
-                    country: ""
+                    country: "",
+                    id: currentId
                 };
                 selectLocation(fallbackName, latitude, longitude, "");
                 els.currentLocName.textContent = `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
             }
-            updateCurrentLocBtnState(); // Update button state after location is determined
+            updateCurrentLocBtnState();
             toggleMenu(false);
         }, () => {
             els.currentLocName.textContent = "permission denied";
-            console.warn("unable to retrieve your location (permission denied)");
-            state.currentLocation = null; // Reset state
+            console.warn("Unable to retrieve your location (permission denied)");
+            state.currentLocation = null;
             updateCurrentLocBtnState();
         });
     }
 
-    // --- firestore crud & listener (with local storage fallback) ---
-
-    function getCustomCitiesCollectionRef() {
-        if (!db || !userId) return null;
-        // private data path: /artifacts/{appId}/users/{userId}/customCities
-        const path = `artifacts/${appId}/users/${userId}/customCities`;
-        return collection(db, path);
+    function saveCurrentLocation() {
+        if (!state.currentLocation || isCurrentLocSaved()) return;
+        saveCity({ ...state.currentLocation });
     }
 
-    function setupFirestoreListener() {
-        if (isLocalMode) {
-            // Local storage fallback for Live Server
-            try {
-                const cities = JSON.parse(localStorage.getItem('savedCities')) || [];
-                state.savedCities = cities;
-                renderSavedCities();
-                updateCurrentLocBtnState(); // NEW: Update state after loading saved cities
-                console.log("local mode: loaded cities from local storage.");
-            } catch (e) {
-                console.error("local mode error: could not parse saved cities from local storage.", e);
-            }
-            els.loadingCities.classList.add('hidden');
-            return;
-        }
-
-        const citiesRef = getCustomCitiesCollectionRef();
-        if (!citiesRef) {
-            console.warn("firestore not ready or user not authenticated.");
-            return;
-        }
-
-        // real-time listener for user's saved cities
-        onSnapshot(citiesRef, (snapshot) => {
-            state.savedCities = [];
-            snapshot.forEach((doc) => {
-                // include the firestore id for easy deletion
-                state.savedCities.push({ id: doc.id, ...doc.data() });
-            });
-            renderSavedCities();
-            updateCurrentLocBtnState(); // NEW: Update state after loading saved cities
-            els.loadingCities.classList.add('hidden');
-        }, (error) => {
-            console.error("error listening to saved cities:", error);
-            els.loadingCities.textContent = "error loading cities.";
-        });
-    }
-
-    async function saveCityToFirestore(cityData) {
-        if (isLocalMode) {
-            // Local storage save logic
-            const exists = state.savedCities.some(c => c.name === cityData.name && c.lat === cityData.lat && c.lon === cityData.lon);
-            if (exists) {
-                console.log("local mode: city already saved.");
-                return;
-            }
-
-            // Assign a temporary local ID
-            cityData.firestoreId = Date.now().toString(); 
-            state.savedCities.push(cityData);
-            localStorage.setItem('savedCities', JSON.stringify(state.savedCities));
-            renderSavedCities();
-            updateCurrentLocBtnState(); // NEW: Update state after saving
-            console.log(`local mode: city ${cityData.name} saved successfully.`);
-            return;
-        }
-
-        const citiesRef = getCustomCitiesCollectionRef();
-        if (!citiesRef) return;
-        
-        // check if city is already saved (simple check on name/lat/lon)
-        const exists = state.savedCities.some(c => c.name === cityData.name && c.lat === cityData.lat && c.lon === cityData.lon);
-        
-        if (exists) {
-            console.log("city already saved.");
-            return;
-        }
-
-        try {
-            await addDoc(citiesRef, cityData);
-            console.log(`city ${cityData.name} saved successfully.`);
-        } catch (e) {
-            console.error("error adding document: ", e);
-        }
-    }
-
-    async function deleteCityFromFirestore(cityId) {
-        if (isLocalMode) {
-            // Local storage delete logic
-            state.savedCities = state.savedCities.filter(c => c.firestoreId !== cityId);
-            localStorage.setItem('savedCities', JSON.stringify(state.savedCities));
-            renderSavedCities();
-            updateCurrentLocBtnState(); // NEW: Update state after deleting
-            console.log(`local mode: city id ${cityId} deleted successfully.`);
-            return;
-        }
-
-        const citiesRef = getCustomCitiesCollectionRef();
-        if (!citiesRef) return;
-        
-        try {
-            await deleteDoc(doc(citiesRef, cityId));
-            console.log(`city id ${cityId} deleted successfully.`);
-        } catch (e) {
-            console.error("error deleting document: ", e);
-        }
-    }
-
-    // New: Function to set the default city
-    function setDefaultCity(name, lat, lon, country) {
-        const cityData = { name, lat, lon, country };
-        state.defaultCity = cityData;
-        localStorage.setItem('defaultCity', JSON.stringify(cityData));
-        console.log(`Default city set to ${name}.`);
-        // Re-render to update the star icon
-        renderSavedCities(); 
-    }
-
-    // New: Function to load the default city on startup
-    function loadDefaultCity() {
-        if (state.defaultCity) {
-            selectLocation(state.defaultCity.name, state.defaultCity.lat, state.defaultCity.lon, state.defaultCity.country, false);
-            return true;
-        }
-        return false;
-    }
+    // saved cities management
 
     function renderSavedCities() {
-        els.savedCitiesList.innerHTML = ''; // clear existing list
+        els.savedCitiesList.innerHTML = '';
+        els.loadingCities.classList.add('hidden');
 
         if (state.savedCities.length === 0) {
-            els.savedCitiesList.innerHTML = `<p class="text-sm text-white/50 text-center p-4">no saved cities. search and use the bookmark icon to save one!</p>`;
+            els.savedCitiesList.innerHTML = '<p class="text-sm text-white/50 text-center p-4">No saved cities yet.</p>';
             return;
         }
 
         state.savedCities.forEach(city => {
-            // Use logical check against the stored defaultCity object
-            const isDefault = state.defaultCity && 
-                              city.name === state.defaultCity.name && 
-                              city.lat === state.defaultCity.lat && 
-                              city.lon === state.defaultCity.lon;
-
-            const cityId = city.id || city.firestoreId; // Use firestoreId for local mode
-
+            const isDefault = state.defaultCity.id === city.id;
+            
             const div = document.createElement('div');
-            div.className = "w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition group";
+            div.className = "w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition";
             div.innerHTML = `
-                <button class="flex-1 flex items-center text-left" onclick="selectLocation('${city.name.replace(/'/g, "\\'")}', ${city.lat}, ${city.lon}, '${city.country.replace(/'/g, "\\'")}', true);">
-                    <span class="font-medium text-sm group-hover:translate-x-1 transition">${city.name}</span>
+                <button class="select-city-btn flex flex-col flex-1 text-left">
+                    <span class="font-medium text-sm">${city.name} ${isDefault ? '<i class="ph ph-star-four text-yellow-300 ml-1"></i>' : ''}</span>
+                    <span class="text-xs text-white/60">${city.country}</span>
                 </button>
                 <div class="flex items-center space-x-2">
-                    <button class="text-yellow-400 p-1 ml-2 opacity-0 group-hover:opacity-100 transition hover:text-yellow-300 ${isDefault ? 'opacity-100 !text-yellow-200' : ''}" 
-                            title="Set as Default City" 
-                            onclick="setDefaultCity('${city.name.replace(/'/g, "\\'")}', ${city.lat}, ${city.lon}, '${city.country.replace(/'/g, "\\'")}')">
-                        <i class="ph ${isDefault ? 'ph-star-fill' : 'ph-star'} text-lg"></i>
+                    <button class="set-default-btn p-2 rounded-full transition text-xs ${isDefault ? 'bg-yellow-500/50 text-white cursor-default' : 'hover:bg-yellow-500/30 text-yellow-300'}" 
+                            data-id="${city.id}" 
+                            title="${isDefault ? 'Default City' : 'Set as Default City'}"
+                            ${isDefault ? 'disabled' : ''}>
+                        <i class="ph ph-star-four text-sm"></i>
                     </button>
-                    <button class="text-red-400 p-1 opacity-0 group-hover:opacity-100 transition hover:text-red-300" 
-                            title="Remove City" 
-                            onclick="deleteCityFromFirestore('${cityId}')">
-                        <i class="ph ph-trash-simple text-lg"></i>
+                    <button class="delete-city-btn p-2 rounded-full hover:bg-red-500/50 transition text-white text-xs" data-id="${city.id}" title="Delete City">
+                        <i class="ph ph-trash text-sm"></i>
                     </button>
                 </div>
             `;
+            
+            // attach select listener
+            div.querySelector('.select-city-btn').addEventListener('click', () => {
+                selectLocation(city.name, city.lat, city.lon, city.country, true);
+            });
+            
+            // attach delete listener
+            div.querySelector('.delete-city-btn').addEventListener('click', (e) => {
+                const cityId = e.currentTarget.dataset.id;
+                deleteCity(cityId);
+            });
+            
+            // attach set default listener
+            const setDefaultBtn = div.querySelector('.set-default-btn');
+            if (setDefaultBtn && !isDefault) {
+                setDefaultBtn.addEventListener('click', () => {
+                    setDefaultCity(city);
+                });
+            }
+            
             els.savedCitiesList.appendChild(div);
         });
     }
-    
-    // --- general event handlers (updated) ---
 
-    // Expose selectLocation, deleteCityFromFirestore, and setDefaultCity to global scope for onclick attributes
-    window.selectLocation = selectLocation;
-    window.deleteCityFromFirestore = deleteCityFromFirestore;
-    window.setDefaultCity = setDefaultCity;
+    function saveCity(cityData) {
+        // prevent duplicates
+        const exists = state.savedCities.some(c => c.id === cityData.id);
+        if (exists) return;
 
-    // Unit change handlers
-    els.unitC.addEventListener('click', () => {
-        state.unit = 'c';
-        localStorage.setItem('weatherUnit', 'c');
-        initUnitUI();
-        fetchWeather();
-    });
-    els.unitF.addEventListener('click', () => {
-        state.unit = 'f';
-        localStorage.setItem('weatherUnit', 'f');
-        initUnitUI();
-        fetchWeather();
-    });
+        if (state.savedCities.length === 0) {
+             setDefaultCity(cityData, false); 
+        }
 
-    // Search handler with debounce
-    let searchTimeout;
-    els.searchInput.addEventListener('input', (e) => {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            searchCities(e.target.value);
-        }, 500); // 500ms debounce
-    });
+        state.savedCities.push(cityData);
+        localStorage.setItem('savedCities', JSON.stringify(state.savedCities));
+        renderSavedCities();
+        updateCurrentLocBtnState();
+    }
 
-    // Close search results on blur
-    els.searchInput.addEventListener('blur', () => {
-        // give a slight delay to allow click on a result
-        setTimeout(() => {
-            els.searchResults.classList.add('hidden');
-        }, 200);
-    });
+    function deleteCity(cityId) {
+        state.savedCities = state.savedCities.filter(c => c.id !== cityId);
+        localStorage.setItem('savedCities', JSON.stringify(state.savedCities));
+        
+        // if the deleted city was the default, reset default to New York
+        if (state.defaultCity.id === cityId) {
+            const newDefault = { lat: 40.7128, lon: -74.0060, name: "New York", country: "USA", id: "40.7128--74.0060" };
+            setDefaultCity(newDefault);
+            selectLocation(newDefault.name, newDefault.lat, newDefault.lon, newDefault.country, false);
+        }
 
-    // Current location handler
-    els.btnCurrentLoc.addEventListener('click', handleCurrentLocation);
-    // NEW: Save current location handler
-    els.saveCurrentLocBtn.addEventListener('click', saveCurrentLocation);
+        renderSavedCities();
+        updateCurrentLocBtnState();
+    }
 
+    // default city funvtions
+    function setDefaultCity(cityData, shouldReRender = true) {
+        state.defaultCity = {
+            name: cityData.name,
+            lat: cityData.lat,
+            lon: cityData.lon,
+            country: cityData.country,
+            id: cityData.id
+        };
+        localStorage.setItem('defaultCity', JSON.stringify(state.defaultCity));
+        if (shouldReRender) {
+            renderSavedCities();
+        }
+    }
 
-    // Mobile menu handlers
+    // UI/event handlers
+
     function toggleMenu(show) {
-        if (show === undefined) show = els.sidebar.classList.contains('-translate-x-full');
+        const shouldShow = show !== undefined ? show : els.sidebar.classList.contains('-translate-x-full');
         
-        if (show) {
-            els.sidebar.classList.remove('-translate-x-full');
-            els.overlay.classList.remove('hidden');
-        } else {
-            els.sidebar.classList.add('-translate-x-full');
-            els.overlay.classList.add('hidden');
+        els.sidebar.classList.toggle('-translate-x-full', !shouldShow);
+        els.overlay.classList.toggle('hidden', !shouldShow);
+    }
+    
+    // tooltip functions
+    function toggleDefaultCityTooltip(show) {
+        const shouldShow = show !== undefined ? show : els.defaultCityTooltip.classList.contains('hidden');
+        els.defaultCityTooltip.classList.toggle('hidden', !shouldShow);
+        
+        // save state to local storage to persist the dismissed state
+        if (!shouldShow) {
+            localStorage.setItem('defaultCityTooltipDismissed', 'true');
         }
     }
-    els.menuBtn.addEventListener('click', () => toggleMenu(true));
-    els.closeMenu.addEventListener('click', () => toggleMenu(false));
-    els.overlay.addEventListener('click', () => toggleMenu(false));
 
-    // --- firebase initialization ---
-    async function initFirebase() {
-        initUnitUI(); // initialize unit display
-
-        if (isLocalMode) {
-            console.warn("running in local mode (no firebase config). saving and loading cities will use local storage.");
-            // Initial call to load saved cities from local storage and set up UI
-            setupFirestoreListener(); 
-            // Load weather for default city or fall back to New York, then check current location
-            if (!loadDefaultCity()) {
-                selectLocation(defaultCityData.city, defaultCityData.lat, defaultCityData.lon, defaultCityData.country, false);
-            }
-            // Attempt to get current location after initial load
-            handleCurrentLocation();
-            return;
+    function showTooltipOnLoad() {
+        // show tooltip only if it hasn't been dismissed
+        if (!localStorage.getItem('defaultCityTooltipDismissed')) {
+            setTimeout(() => {
+                 toggleDefaultCityTooltip(true);
+            }, 500);
         }
+    }
+    
+    // initial load function
+    function initApp() {
+        initUnitUI();
+        renderSavedCities();
         
-        setLogLevel('Debug');
-        const app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        auth = getAuth(app);
+        // initial load uses the default city which was set at the top of the script
+        selectLocation(state.defaultCity.name, state.defaultCity.lat, state.defaultCity.lon, state.defaultCity.country, false);
+        
+        // get current location information (but don't switch to it unless button is clicked)
+        handleCurrentLocation();
+        
+        // show the default city explanation tooltip
+        showTooltipOnLoad();
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                userId = user.uid;
-                isAuthReady = true;
-                setupFirestoreListener(); // Listen to Firestore for saved cities
-
-                // Load weather for default city or fall back to New York
-                if (!loadDefaultCity()) {
-                    selectLocation(defaultCityData.city, defaultCityData.lat, defaultCityData.lon, defaultCityData.country, false);
-                }
-                
-                // Attempt to get current location after initial load
-                handleCurrentLocation();
-            } else if (initialAuthToken) {
-                try {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } catch (error) {
-                    console.error("custom token sign-in failed:", error);
-                    // If token fails, fall back to anonymous or display error
-                    await signInAnonymously(auth);
-                }
-            } else {
-                 // No token, sign in anonymously
-                 await signInAnonymously(auth);
-            }
+        // unit switching
+        els.unitC.addEventListener('click', () => {
+            state.unit = 'c';
+            localStorage.setItem('weatherUnit', 'c');
+            initUnitUI();
+            fetchWeather();
         });
+        
+        els.unitF.addEventListener('click', () => {
+            state.unit = 'f';
+            localStorage.setItem('weatherUnit', 'f');
+            initUnitUI();
+            fetchWeather();
+        });
+
+        // search input with debounce
+        let searchTimer;
+        els.searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                searchCities(e.target.value);
+            }, 300);
+        });
+        
+        // current location & save
+        els.btnCurrentLoc.addEventListener('click', () => {
+             // only select location if it's already detected, otherwise run detection
+             if (state.currentLocation) {
+                 selectLocation(state.currentLocation.name, state.currentLocation.lat, state.currentLocation.lon, state.currentLocation.country);
+             } else {
+                 handleCurrentLocation();
+             }
+        });
+        els.saveCurrentLocBtn.addEventListener('click', saveCurrentLocation);
+
+        // mobile menu toggles
+        els.menuBtn.addEventListener('click', () => toggleMenu(true));
+        els.closeMenu.addEventListener('click', () => toggleMenu(false));
+        els.overlay.addEventListener('click', () => toggleMenu(false));
+        
+        // default city tooltip
+        els.defaultCityInfoBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleDefaultCityTooltip();
+        });
+        els.closeDefaultCityTooltip.addEventListener('click', () => toggleDefaultCityTooltip(false));
     }
 
-    // --- app start ---
-    initFirebase();
+    // expose selectLocation to global scope for inline usage
+    window.selectLocation = selectLocation; 
+    
+    // start the app
+    document.addEventListener('DOMContentLoaded', initApp);
+
     </script>
 </body>
 </html>
