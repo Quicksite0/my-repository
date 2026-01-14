@@ -1,0 +1,62 @@
+{
+    "brick_main": {
+        "Stages": [
+            {
+                "useAnisotropic": true,
+                "baseColorFactor": [
+                    0.9063317593127924,
+                    0.9063317593127924,
+                    0.9063317593127924,
+                    1.0
+                ],
+                "vertColor": false,
+                "instanceDiffuse": false,
+                "metallicFactor": 0.0,
+                "roughnessFactor": 0.5,
+                "opacityFactor": 1.0,
+                "vertColorEmissive": false,
+                "instanceEmissive": false
+            },
+            {},
+            {},
+            {}
+        ],
+        "name": "brick_main",
+        "mapTo": "brick_main",
+        "class": "Material",
+        "groundType": "ASPHALT",
+        "activeLayers": 1,
+        "version": 1.5,
+        "dynamicCubemap": false
+    },
+    "brick": {
+        "Stages": [
+            {
+                "useAnisotropic": true,
+                "baseColorFactor": [
+                    0.9063317593127924,
+                    0.9063317593127924,
+                    0.9063317593127924,
+                    1.0
+                ],
+                "vertColor": false,
+                "instanceDiffuse": false,
+                "metallicFactor": 0.0,
+                "roughnessFactor": 0.5,
+                "opacityFactor": 1.0,
+                "vertColorEmissive": false,
+                "instanceEmissive": false
+            },
+            {},
+            {},
+            {}
+        ],
+        "name": "brick",
+        "mapTo": "brick",
+        "class": "Material",
+        "groundType": "ASPHALT",
+        "activeLayers": 1,
+        "version": 1.5,
+        "dynamicCubemap": false
+    }
+}

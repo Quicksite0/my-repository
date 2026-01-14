@@ -1,0 +1,110 @@
+{
+"brick" :{
+    "information": {
+        "name": "Brick",
+        "authors": "Quicksite",
+        "value": 5
+    },
+
+    "slotType": "main",
+
+    "refNodes": [
+        ["ref:", "left:", "back:", "up:"],
+        ["tc", "tl", "tb", "tu"],
+    ],
+
+    "flexbodies": [
+        ["mesh", "[group]:", "nonFlexMaterials"],
+        ["brick_body", ["brick_body"]],
+    ],
+    
+    "nodes": [
+        ["id", "posX", "posY", "posZ"],
+        {"nodeWeight": 10},
+        {"nodeMaterial": "|NM_METAL"},
+        {"collision": true},
+        {"selfCollsion": false},
+        {"group": "brick_body"},
+        ["tc", 0, 0, 0],
+        ["tl", 1, 0, 0],
+        ["tb", 0, 1, 0, {"nodeWeight": 20}],
+        ["tu", 0, 0, 1],
+        ["t1", 1, 1, 0, {"nodeWeight": 20}],
+        ["t2", 1, 0, 1],
+        {"group": ""}, 
+        
+        ["t3", 0.5, -1.2, 0],
+        ["t4", 0.5, -1.2, 1],
+        
+        {"group": ""},
+        
+        
+        
+    ],
+
+    "beams": [
+        ["id1:", "id2:"],
+        {"beamSpring": 43000},
+        {"beamDamp": 400},
+        {"beamDeform": 2000},
+        {"beamStrength": 30000},
+        ["tc", "tu"],
+        ["tc", "tl"],
+        ["tc", "tb"],
+        ["tu", "tl"],
+        ["tu", "tb"],
+        ["tl", "tb"],
+        ["t1", "tu"],
+        ["t1", "tl"],
+        ["t1", "tb"],
+        ["t1", "t2"],
+        ["t2", "tu"],
+        ["t2", "tl"],
+        ["t2", "tb"],
+        ["t2", "tc"],
+        ["t4", "t3"],
+        
+        ["t5","t7"],
+        ["t6","t8"],
+        ["t8","t7"],
+        ["t5","t6"],
+        ["t5","t8"],
+        ["t6","t7"],
+        
+       {"beamSpring": 120000, "beamDamp": 4000},
+       ["t2", "t4"],
+       ["tl", "t3"],
+       ["tu", "t4"],
+       ["tc", "t3"],
+
+       //coilover
+       {"beamSpring": 120000},
+       ["t3", "tu"],
+       ["t3", "t2"],
+    ],
+
+    "triangles": [
+        ["id1:", "id2:", "id3:"],
+        //Coefs use percentages (100 is default)
+        {"dragCoef": 100},
+        {"liftCoef": 100},
+        ["t2", "tl", "t1"],
+        ["tu", "t1", "tb"],
+        ["t2", "t1", "tu"],
+        ["tu", "tb", "tc"],       
+        
+    ],
+
+    "hydros": [
+        ["id1:","id2:"],
+        {"factor": 1},
+        {"beamStrength": 30000},
+        //degrees of rotation
+        {"steeringWheelLock": 720},
+        {"lockDegrees": 25},
+        ["tl", "t2"],
+        ["tu", "tc"],
+    ],
+
+}
+}

@@ -1,0 +1,13 @@
+{
+    "Name": "Brick",
+    "Author": "Quicksite",
+    "Type": "Vehicle",
+    "Years": "2026",
+    "default_pc": "default",
+    "default_color": "White",
+    "colors": {
+        "White": "1 1 1 1",
+        "Red": "1 0 0 1",
+        "Blue": "0 0 1 1"
+    }
+}
