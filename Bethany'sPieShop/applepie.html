@@ -3,30 +3,16 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>Welcome to Bethany' Pie Shop!</title>
+    <meta charset="UTF-8">
+    <title>Bethany's Pie Shop</title>
     <meta name="author" content="Bethany's Pie Shop">
-    <meta name="description" content="Store front for Bethany's Pie Shop">
+    <meta name="description" content="Internet store for Bethany's Pie Shop">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="favicon.ico">
     <link rel="stylesheet" href="style.css">
     <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
     <![endif]-->
-    <script>
-        function save(){
-            localStorage.setItem("applepie", true);
-        }
-        window.onload = function(){
-            var favourite = document.getElementById('favorite');
-            if(window.localStorage){
-                var storage = window.localStorage;
-                if(storage.getItem("applepie") === "true"){
-                    favourite.innerHTML = "&#10084; Added to favorites!";
-                }
-            }
-        }
-    </script>
 </head>
 
 <body>
@@ -37,11 +23,8 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="pieoverview.html">All Pies</a></li>
                 <li><a href="info.html">Info</a></li>
-                <dl>
-                    <dt>We love pies</dt>
-                    <dd>So do you...</dd>
-                </dl>
-            </ul>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>           
         </nav>
     </header>
 
