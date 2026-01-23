@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"><head>
+    <script src="p5.js"></script>
+    <script src="p5.sound.min.js"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+
+    <script src="ml5.min.js"></script>
+    <script src="webcam.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8">
+
+  </head>
+  <body>
+      <h3 class="text-center">Read out the prediction</h3>
+     <p style="color:black;"><b>Description : </b> Use speech synthesis to read the predicition result
+    </p><ol style="color:black;text-align:left;">
+      <li> Define a variable to store the speech API</li> 
+      <li>Store the label of prediction result which we want the system to speak in a variable</li>
+      <li>Use the SpeechSynthesisUtterance() function to convert text to speech, pass the variable which holds the prediction result to the SpeechSynthesisUtterance() as a parameter and store it in a variable</li>
+      <li>Then use speak() function and pass the variable which holds the text to speech converted data to the speak() function</li>
+      <li>Write all the above code inside gotResult() function in sketch.js</li>
+      <li>For reference - To recall speech API refer to the JS code of class 100(Take My Selfie app)</li>
+    </ol><p></p>
+    <p class="btn btn-info">Model is trained to identify these objects: <span class="btn ">Watch</span> <span class="btn">Spoon</span> <span class="btn">Phone</span> <span class="btn ">Water Bottle</span></p>
+
+   
+  <div class="container">
+   
+   <div class="row">
+        <div class="col-md-6">
+            <label> Live webcam Preview  </label>
+            <div id="camera"></div>
+            <br>
+            <button onclick="take_snapshot();" class="btn  btn-info w-50">Capture Image</button>
+        </div>
+        <div class="col-md-6">
+            <label>Your snap  </label>
+            <div id="result"></div>
+            <br>
+            <button onclick="check();" class="btn  btn-info w-50">Identify Image</button>
+        </div>
+   </div>
+   <div>
+    <br>
+   
+    
+    <p>Object : <span id="result_object_name"></span> </p>
+    <p>Accuracy : <span id="result_object_accuracy"></span> </p>
+   </div>
+  </div>
+    <script src="sketch.js"></script>
+  
+
+</body></html>
