@@ -1,0 +1,52 @@
+body{
+    background-size: cover;
+    background-position: center;
+}
+.heading{
+font-size: 23px;
+width: 100%;
+margin: 0px;
+}
+#status{
+font-size: 16px;
+
+}
+canvas{
+    box-shadow: 10px 10px 10px gray;
+    border-radius: 10px;
+}
+#lounge_room{
+    align-self: middle;
+    margin-top: 200px;
+    margin-right: auto;
+    margin-left: 40px;
+    color: white;
+}
+#laundry_room{
+    align-self: middle;
+    margin-top: 200px;
+    margin-right: auto;
+    margin-left: 40px;
+    color: white;
+}
+#kitchen{
+    align-self: middle;
+    margin-top: 200px;
+    margin-right: auto;
+    margin-left: 40px;
+    color: white;
+}
+#bedroom{
+    align-self: middle;
+    margin-top: 200px;
+    margin-right: auto;
+    margin-left: 40px;
+    color: white;
+}
+#bathroom{
+    align-self: middle;
+    margin-top: 200px;
+    margin-right: auto;
+    margin-left: 40px;
+    color: white;
+}
