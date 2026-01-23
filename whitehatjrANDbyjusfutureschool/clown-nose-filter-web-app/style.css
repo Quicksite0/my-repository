@@ -1,0 +1,33 @@
+h3{
+    font-size: 25px !important;
+}
+
+.btn-success:hover{
+    background-color: red;
+    opacity: 60%;
+}
+
+canvas{
+    animation-name: coolanimation;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes coolanimation{
+    0% {box-shadow: 5px 1px 38px red;}
+    50% {box-shadow: 5px 1px 38px yellow;}
+    100% {box-shadow: 5px 1px 38px red;}
+    
+}
+
+.btn-info{
+    animation-name: title;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes title{
+    0% {background-color: lightskyblue;}
+    50% {background-color: rgb(111, 203, 97);}
+    100% {background-color: lightskyblue;}
+}

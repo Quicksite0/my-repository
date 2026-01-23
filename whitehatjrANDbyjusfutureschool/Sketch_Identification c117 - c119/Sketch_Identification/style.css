@@ -1,0 +1,35 @@
+body{
+    background-color:rgb(61, 157, 241);
+    color: black;
+}
+
+h1{
+    color:rgb(0, 0, 0);
+    background-color:rgb(232, 76, 76);
+    
+}
+
+#show_sketch{
+    float:right
+}
+
+canvas{
+    border: 5px solid white;
+    border-style: 20px;
+    animation-name: animation;
+    animation-duration: 4s;
+    margin-top: 50px;
+    animation-iteration-count: infinite;
+}
+
+@keyframes animation{
+    0% {box-shadow: 1px 1px 38px rgb(0, 0, 0);}
+    50% {box-shadow: 1px 1px 38px rgb(255, 255, 255);}
+    100% {box-shadow: 1px 1px 38px rgb(0, 0, 0);}
+}
+
+
+P{
+    padding-top: 10px;
+    font-size: 25px;
+}

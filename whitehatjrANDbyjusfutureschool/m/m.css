@@ -1,0 +1,18 @@
+body
+{
+   background-image: linear-gradient(to bottom right, red,orange,yellow,red,orange,yellow);
+}
+
+.heading
+{
+    width:80%;
+    font-size: 22;
+}
+
+#Camera
+{
+    border: orange;
+    width: 350;
+    height: 300;
+    border: -2px black;
+}
