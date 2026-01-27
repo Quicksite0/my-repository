@@ -1,29 +1,72 @@
 body {
     margin-top: 0px;
-    background-color: rgb(35, 207, 167);
-    font-family: 'Trebuchet MS';
+    background-color: white;
+    font-family: 'Trebuchet MS', Arial, sans-serif;
     margin-left: auto;
     margin-right: auto;
-    color: firebrick;
+    color: #23cfa7;
     background-image: url('images/pattern.png');
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-transform: capitalize;
+    font-family: 'Cookie', 'Trebuchet MS', Arial, sans-serif;
+    font-weight: normal;
+}
+
 #mainheader {
-    background-color: firebrick;
-    color: rgb(35, 207, 167);
+    background-color: white;
+    color: #23cfa7;
 }
 
 nav {
-    color: rgb(35, 207, 167);
+    background-color: white;
     height: 60px;
     width: 1000px;
     margin: 0 auto 20px;
+    font-weight: lighter;
+    font-family: 'Cookie', 'Trebuchet MS', Arial, sans-serif;
+    font-size: 28px;
+    text-transform: capitalize;
+}
+
+nav>ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav>ul>li {
+    float: left;
+}
+
+nav>ul>li>a {
+    display: block;
+    color: #23cfa7;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav>ul>li>a:hover {
+    color: #19896f;
 }
 
 #leftmenu {
     margin-bottom: 20px;
     float: left;
     width: 30%;
+}
+
+#leftmenu a {
+    font-family: 'Cookie', 'Trebuchet MS', Arial, sans-serif;
+    font-size: 150%;
 }
 
 .searchbox {
@@ -41,6 +84,7 @@ nav {
 footer {
     clear: both;
     width: 100%;
+    align-self: center;
 }
 
 header,
@@ -52,25 +96,6 @@ main,
 article,
 figure {
     display: block;
-}
-
-nav>ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-nav>ul>li {
-    float: left;
-}
-
-nav>ul>li>a {
-    display: block;
-    color: rgb(35, 207, 167);
-    text-align: center;
-    padding: 16px;
-    text-decoration: none;
-    font-weight: bold;
 }
 
 form {
@@ -87,38 +112,134 @@ select {
 }
 
 fieldset {
-    border-color: firebrick;
+    border-color: black;
     border-radius: 15px;
 }
 
 
-input[type=submit]{
+input[type=submit] {
     background-color: rgba(0, 0, 0, 0);
     padding: 10px 10px;
-    border-color: firebrick;
-    color: firebrick;
+    border-color: black;
+    color: black;
     text-decoration: none;
     border-radius: 10px;
 }
 
-input, textarea, option{
-    font-family: 'Trebuchet MS';
-    color: firebrick;
+input,
+textarea,
+option {
+    font-family: 'Trebuchet MS', Arial, sans-serif;
+    color: black;
     border-radius: 5px;
 }
 
-input:valid{
+input:valid {
     border-color: green;
 }
 
-input:invalid{
+input:invalid {
     border-color: red;
 }
 
-input:focus:invalid{
-    border-color: firebrick;
+input:focus:invalid {
+    border-color: black;
 }
 
-input:required, textarea:required{
+input:required,
+textarea:required {
     border-style: dashed;
+}
+
+.promos {
+    background-color: #23cfa7;
+    color: white;
+    width: 500px;
+    text-align: center;
+    margin-bottom: 20px;
+    padding-top: 1px;
+    padding-bottom: 10px;
+    border-width: 10px;
+    border-style: ridge;
+    border-color: #919191;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.promoimg {
+    width: 66%;
+    height: auto;
+    border-width: 10px;
+    border-style: inset;
+    border-color: #919191;
+}
+
+footer {
+    color: #23cfa7;
+    width: 400px;
+    text-align: center;
+    margin-bottom: 20px;
+    padding-top: 1px;
+    padding-bottom: 10px;
+    border-width: 10px;
+    border-style: ridge;
+    border-color: #919191;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a {
+    color: #0048ff;
+}
+
+a:hover {
+    color: #001e6a;
+}
+
+button {
+    background-color: #ffffff00;
+    padding: 10px;
+    border-color: #23cfa7;
+    color: #23cfa7;
+    border-radius: 10px;
+    border-style: outset;
+    border-width: 5px;
+}
+
+button:hover {
+    background-color: #e0e0e0;
+}
+
+button:active {
+    border-style: ridge;
+}
+
+mark {
+    background-color: #23cfa7;
+    color: white;
+}
+
+.pietable>tbody>tr:nth-of-type(odd){
+    background-color: #23cfa7;
+    color: white;
+}
+tr:nth-of-type(even) {
+    background-color: white;
+    color: #23cfa7;
+}
+
+.pietable>tbody>tr:nth-of-type(even)>td>a {
+    color: #23cfa7;
+}
+
+.pietable>tbody>tr:nth-of-type(even)>td>a:hover {
+    color: #19896f;
+}
+
+.pietable>tbody>tr:nth-of-type(odd)>td>a {
+    color: white;
+}
+
+.pietable>tbody>tr:nth-of-type(odd)>td>a:hover {
+    color: #7b7b7b;
 }

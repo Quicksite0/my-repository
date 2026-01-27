@@ -8,6 +8,9 @@
     <meta name="description" content="Internet store for Bethany's Pie Shop">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -31,22 +34,26 @@
     <div style="width: 1000px; margin-left: auto; margin-right: auto;">
 
         <aside id="leftmenu">
-            <a href="index.html"><img src="images/bethanylogo.png" /></a>
+            <a href="index.html"><img src="images/bethanylogo.png"/></a>
             <header>
-                <h3 style="text-align: center;">Browse our Pies</h3>
+                <h1 style="text-align: center;">Browse our Pies</h1>
             </header>
             <ul>
                 <li><a href="pieoverview.html">All pies</a></li>
                 <li><a href="fruitpies.html">Fruit pies</a></li>
+                <ul id="individualpies">
+                    <li><a href="applepie.html">Apple Pie</a></li>
+                </ul>
                 <li><a href="cheesecakes.html">Cheesecakes</a></li>
                 <li><a href="seasonalpies.html">Seasonal pies</a></li>
                 <li><a href="index.html#promos">Promos</a></li>
                 <dl>
-                    <dt>We love pies</dt>
-                    <dd>So do you...</dd>
+                    <dt><h2 style="margin-bottom: 1px; margin-top: 10px;">We love pies</h2></dt>
+                    <dd><h2 style="margin-top: 1px; margin-bottom: 1px;" >So do you...</h2></dd>
                 </dl>
             </ul>
             <input type="search" class="searchbox" placeholder="Search...">
+            </form>
         </aside>
 
         <main id="main">
