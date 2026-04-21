@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Custom Pie Maker</title>
+        <style>
+            #options {
+                width: 300px;
+                display: inline-block;
+                vertical-align: top;
+            }
+        </style>
+    </head>
+    <body>
+        <style>
+            #meringue path{
+                transform-origin: 200px 200px;
+            }
+            #meringue path:nth-of-type(1){
+                transform: rotate(0deg);
+            }
+            #meringue path:nth-of-type(2){
+                transform: rotate(60deg);
+            }
+            #meringue path:nth-of-type(3){
+                transform: rotate(120deg);
+            }
+            #meringue path:nth-of-type(4){
+                transform: rotate(180deg);
+            }
+            #meringue path:nth-of-type(5){
+                transform: rotate(240deg);
+            }
+            #meringue path:nth-of-type(6){
+                transform: rotate(300deg);
+            }
+
+            .animated{
+                transition: all 1s;
+            }
+        </style>
+        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+        <rect x="0" y="0" width="400" height="400" fill="transparent" stroke="black"/>
+        <text x="200" y="30" text-anchor="middle" font-family="sans-serif" fill="#23cfa7" font-size="25">
+            <tspan style="font-weight: bold;">Bethany's</tspan> Custom Pie Maker</text>
+        <image x="320" y="320" width="50" height="auto" opacity="50%" href="https://alexandriahansen.github.io/pie-project/images/bethanylogo.png"/>
+        <circle class="animated" id="crust-outer" cx="200" cy="200" r="150" fill="transparent"/>
+        <circle class="animated" id="crust-inner" cx="200" cy="200" r="110" fill="transparent"/>
+        <circle class="animated" id="filling" cx="200" cy="200" r="140" fill="transparent"/>
+        <g id="meringue" style="display: none;">
+            <circle cx="200" cy="200" r="130" fill="white" stroke="#b3702d"/>
+            <path d="M 200, 200 q 65, -65 0, -130" stroke="#b3702d" fill="transparent"/>
+            <path d="M 200, 200 q 65, -65 0, -130" stroke="#b3702d" fill="transparent"/>
+            <path d="M 200, 200 q 65, -65 0, -130" stroke="#b3702d" fill="transparent"/>
+            <path d="M 200, 200 q 65, -65 0, -130" stroke="#b3702d" fill="transparent"/>
+            <path d="M 200, 200 q 65, -65 0, -130" stroke="#b3702d" fill="transparent"/>
+            <path d="M 200, 200 q 65, -65 0, -130" stroke="#b3702d" fill="transparent"/>
+        </g>
+    </svg>
+        <div id="options" class="options">
+            <fieldset>
+                <legend>Choose a crust</legend>
+                <input id="no-crust" type="radio" name="crust" value="none" checked><label for="no-crust">None</label><br>
+                <input id="pastry-crust" type="radio" name="crust" value="pastry" checked><label for="pastry-crust">Pastry</label><br>
+                <input id="graham-crust" type="radio" name="crust" value="graham" checked><label for="graham-crust">Graham Cracker</label><br>
+                <input id="chocolate-crust" type="radio" name="crust" value="chocolate" checked><label for="chocolate-crust">Chocolate</label><br>
+            </fieldset>
+            <fieldset>
+                <legend>Choose a filling</legend>
+                <input id="no-filling" type="radio" name="filling" value="none" checked><label for="no-filling">None</label><br>
+                <input id="keylime-filling" type="radio" name="filling" value="keylime" checked><label for="keylime-filling">Key Lime</label><br>
+                <input id="pumpkin-filling" type="radio" name="filling" value="pumpkin" checked><label for="pumpkin-filling">Pumpkin</label><br>
+                <input id="lemon-filling" type="radio" name="filling" value="lemon" checked><label for="lemon-filling">Lemon</label><br>
+            </fieldset>
+            <fieldset>
+                <legend>Choose a topping</legend>
+                <input id="no-topping" type="radio" name="topping" value="none" checked><label for="no-topping">None</label><br>
+                <input id="meringue-topping" type="radio" name="topping" value="meringue" checked><label for="meringue-topping">Meringue</label><br>
+            </fieldset>
+            <button id="animate">Explode!</button>
+        </div>
+        <script> 
+            const crustElements = document.querySelectorAll("[name=crust]");
+            const outerCrust = document.getElementById('crust-outer');
+            const innerCrust = document.getElementById('crust-inner');
+            const filling = document.getElementById('filling');
+            const meringue = document.getElementById('meringue');
+            document.getElementById('options').addEventListener('change', (e) => {
+                switch (e.target.name) {
+                case 'crust':
+                    let colors = [];
+                    switch (e.target.value){
+                    case 'none':
+                        colors = ['transparent', 'transparent'];
+                        break;
+                    case 'pastry':
+                        colors = ['#DECCB8', '#F2DFC9'];
+                        break;
+                    case 'graham':
+                        colors = ['#BA870D', '#DEA010'];
+                        break;
+                    case 'chocolate':
+                        colors = ['#2E1802', '#422303'];
+                        break;
+                    default:
+                        return;
+                    }
+                    innerCrust.setAttribute('fill', colors[0]);
+                    outerCrust.setAttribute('fill', colors[1]);
+                    break;
+                case 'filling':
+                    switch (e.target.value) {
+                    case 'none':
+                        filling.setAttribute('fill', 'transparent');
+                        break;
+                    case 'keylime':
+                        filling.setAttribute('fill', '#DFF5A2');
+                        break;
+                    case 'pumpkin':
+                        filling.setAttribute('fill', '#BD7502');
+                        break;
+                    case 'lemon':
+                        filling.setAttribute('fill', '#FFF4BD');
+                        break;
+                    }
+                break;
+                case 'topping':
+                    switch (e.target.value) {
+                        case 'none':
+                            meringue.style.display = 'none';
+                            break;
+                        case 'meringue':
+                            meringue.style.display = '';
+                            break;
+                    }
+                }
+            });
+
+            const animateButton = document.getElementById('animate');
+            let isExploded = false;
+            animateButton.addEventListener('click', () => {
+                if (isExploded){
+                    animateButton.innerHTML = "Explode!";
+                    outerCrust.style.transform = 'translate(0, 0) scale(1)';
+                    innerCrust.style.transform = 'translate(0, 0) scale(1)';
+                    filling.style.transform = 'translate(0, 0) scale(1)';
+                    meringue.style.transform = 'translate(0, 0) scale(1)';
+                } else{
+                    animateButton.innerHTML = "Reassemble";
+                    outerCrust.style.transform = 'translate(-20px, 20px) scale(0.6)';
+                    innerCrust.style.transform = 'translate(-20px, 20px) scale(0.6)';
+                    filling.style.transform = 'translate(180px, 20px) scale(0.6)';
+                    meringue.style.transform = 'translate(80px, 180px) scale(0.6)';
+                }
+                isExploded = !isExploded;
+            });
+        </script>
+    </body>
