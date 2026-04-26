@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Storing Data in HTML - Remove Data</title>
+        <link href="Content/Bootstrap.css" rel="stylesheet" />
+        <link href="Content/StoringData.css" rel="stylesheet" />
+        <script type="text/javascript">
+            //#region //------------------------------------------- Set Storage
+            function setLocalStorage() {
+                let data = document.getElementById("localData").value;
+                localStorage.setItem("myLocalData", data);
+
+                document.getElementById("localData").value = ""; //-- clear out the field so we can enter a new value
+
+                //-- Adding some more data. Books!
+                let addData = ["Binary New World", "Infinite Loop", "The Hex Files", "Jane Error", "Catch 10110", "Lord of the Files"];
+
+                for (let i = 0; i < addData.length; i++) {
+                    localStorage.setItem("Book " + (i + 1), addData[i]);
+                }
+            }
+
+            function setSessionStorage() {
+                let data = document.getElementById("sessionData").value;
+                sessionStorage.setItem("mySessionData", data);
+
+                document.getElementById("sessionData").value = ""; //-- clear out the field so we can enter a new value
+
+                //-- Adding some more data. Pizza, Yum!
+                let addData = ["Pepperoni", "Cheese", "Sausage", "Supreme", "Ham and pineapple", "Vegetable"];
+
+                for (let i = 0; i < addData.length; i++) {
+                    sessionStorage.setItem("Pizza Choice " + (i + 1), addData[i]);
+                }
+            }
+            //#endregion
+
+            //#region //------------------------------------------- Get Storage
+            function getLocalStorage() {
+                document.getElementById("localStorageValue").textContent = localStorage.getItem("myLocalData");
+            }
+
+            function getSessionStorage() {
+                document.getElementById("sessionStorageValue").textContent = sessionStorage.getItem("mySessionData");
+            }
+            //#endregion
+
+            //#region //------------------------------------------- Loop Through All Storage
+            function loopThroughLocalStorage() {
+                let dataHtml = "";
+
+                for (var i = 0; i < localStorage.length; i++) {
+                    dataHtml += "<p>" + localStorage.getItem(localStorage.key(i)) + "</p>";
+                }
+
+                document.getElementById("localStorageAllData").innerHTML = dataHtml;
+            }
+
+            function loopThroughSessionStorage() {
+                let dataHtml = "";
+
+                for (var i = 0; i < sessionStorage.length; i++) {
+                    dataHtml += "<p>" + sessionStorage.getItem(sessionStorage.key(i)) + "</p>";
+                }
+
+                document.getElementById("sessionStorageAllData").innerHTML = dataHtml;
+            }
+            //#endregion
+
+            //#region //------------------------------------------- Remove Storage
+            function removeLocalStorage() {
+                localStorage.removeItem("myLocalData");
+            }
+
+            function removeSessionStorage() {
+                sessionStorage.removeItem("mySessionData");
+            }
+            //#endregion
+
+            //#region //------------------------------------------- Clear Storage
+            function clearLocalStorage(){
+                localStorage.clear();
+            }
+
+            function clearSessionStorage(){
+                sessionStorage.clear();
+            }
+            //#endregion
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h4>Local Storage</h4>
+            <div class="p-4 mb-5 storageContainer">
+                <div class="row mb-3">
+                    <div class="col-8">
+                        <input type="text" class="form-control mr-2" id="localData" />
+                    </div>
+                    <div class="col-4">
+                        <button class="btn setButton" type="button" onclick="setLocalStorage()">Set Local Data</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn getButton" onclick="getLocalStorage()">Get Local Data</button>
+                        <button class="btn loopButton" onclick="loopThroughLocalStorage()">Get All Local Data</button>
+                        <button class="btn removeButton" onclick="removeLocalStorage()">Remove Local Data</button>
+                        <button class="btn clearButton" onclick="clearLocalStorage()">Clear All Local Data</button>
+                    </div>
+                    <div class="col pl-5">
+                        <div class="getText mb-3" id="localStorageValue"></div>
+                        <div class="getLoopText" id="localStorageAllData"></div>
+                    </div>
+                </div>
+            </div>
+            <h4>Session Storage</h4>
+            <div class="p-4 storageContainer">
+                <div class="row mb-3">
+                    <div class="col-8">
+                        <input type="text" class="form-control mr-2" id="sessionData" />
+                    </div>
+                    <div class="col-4">
+                        <button class="btn setButton" type="button" onclick="setSessionStorage()">Set Session Data</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn getButton" onclick="getSessionStorage()">Get Session Data</button>
+                        <button class="btn loopButton" onclick="loopThroughSessionStorage()">Get All Session Data</button>
+                        <button class="btn removeButton" onclick="removeSessionStorage()">Remove Session Data</button>
+                        <button class="btn clearButton" onclick="clearSessionStorage()">Clear All Session Data</button>
+                    </div>
+                    <div class="col pl-5">
+                        <div class="getText mb-3" id="sessionStorageValue"></div>
+                        <div class="getLoopText" id="sessionStorageAllData"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
