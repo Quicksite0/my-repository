@@ -1,3 +1,3 @@
 install:
-https://pypi.org/project/pillow/
-https://python-docx.readthedocs.io/en/latest/user/install.html
+Version 12.2.0 https://pypi.org/project/pillow/ 
+Version 1.2.0 https://pypi.org/project/python-docx/
