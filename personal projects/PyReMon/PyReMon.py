@@ -3,6 +3,23 @@ from tkinter import ttk
 import psutil
 import threading
 import ctypes
+import subprocess
+import os
+
+# force all internal subprocess calls (like GPUtil checking nvidia-smi) to stay hidden on Windows
+if os.name == 'nt':
+    _original_popen = subprocess.Popen
+    class _HiddenPopen(_original_popen):
+        def __init__(self, *args, **kwargs):
+            if 'startupinfo' not in kwargs:
+                suinfo = subprocess.STARTUPINFO()
+                suinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+                suinfo.wShowWindow = subprocess.SW_HIDE
+                kwargs['startupinfo'] = suinfo
+            if 'creationflags' not in kwargs:
+                kwargs['creationflags'] = subprocess.CREATE_NO_WINDOW
+            super().__init__(*args, **kwargs)
+    subprocess.Popen = _HiddenPopen
 
 try:
     import GPUtil
