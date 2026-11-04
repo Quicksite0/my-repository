@@ -1,4 +1,4 @@
-A resource monitor for Windows 11 made in python. Only has support for NVIDIA GPUs at the moment.
+A resource monitor for Windows 11 made in python. Has support for all major GPUs! (need tester for ARC graphics card)
 
 Install (to run off python):
 psutil 7.2.2 https://pypi.org/project/psutil/
