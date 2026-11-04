@@ -6,7 +6,7 @@ import ctypes
 import subprocess
 import os
 
-# force all internal subprocess calls (like GPUtil checking nvidia-smi) to stay hidden on Windows
+# force all internal subprocess calls to stay hidden on Windows
 if os.name == 'nt':
     _original_popen = subprocess.Popen
     class _HiddenPopen(_original_popen):
@@ -23,9 +23,9 @@ if os.name == 'nt':
 
 try:
     import GPUtil
-    GPU_AVAILABLE = True
+    NVIDIA_AVAILABLE = True
 except ImportError:
-    GPU_AVAILABLE = False
+    NVIDIA_AVAILABLE = False
 
 # Helper to make Windows native title bars dark
 def set_window_dark_mode(window, dark=True):
@@ -84,6 +84,8 @@ class ResourceMonitor:
         self.read_history = [0] * self.max_history
         self.write_history = [0] * self.max_history
 
+        self.gpu_type = self.detect_gpu_type()
+
         # top header frame
         self.header_frame = tk.Frame(root)
         self.header_frame.pack(fill="x", padx=25, pady=10)
@@ -107,10 +109,11 @@ class ResourceMonitor:
         self.ram_canvas.pack(pady=(2,8))
 
         # gpu usage
-        self.gpu_label = tk.Label(root, text="GPU Usage: Not available/supported", font=("Helvetica", 10, "bold"))
-        self.gpu_label.pack(anchor="w", padx=30)        
+        gpu_title = f"GPU Usage ({self.gpu_type})" if self.gpu_type != "N/A" else "GPU Usage: N/A"
+        self.gpu_label = tk.Label(root, text=gpu_title, font= ("Helvetica", 10, "bold"))
+        self.gpu_label.pack(anchor="w", padx=30)
         self.gpu_canvas = tk.Canvas(root, width=340, height=45, highlightthickness=0)
-        self.gpu_canvas.pack(pady=(2,8))
+        self.gpu_canvas.pack(pady=(2,6))
 
         # disk read
         self.read_label = tk.Label(root, text="Disk Read: 0 B/s", font=("Helvetica", 9, "bold"))
@@ -131,6 +134,51 @@ class ResourceMonitor:
 
         self.monitor_thread = threading.Thread(target=self.background_monitor, daemon=True)
         self.monitor_thread.start()
+
+    def detect_gpu_type(self):
+        if NVIDIA_AVAILABLE:
+            try:
+                gpus = GPUtil.getGPUs()
+                if gpus:
+                    return "NVIDIA"
+            except Exception:
+                pass
+        # check for gpu via Windows WMIC/Powershell
+        try:
+            cmd = "powershell \"Get-CimInstance Win32_VideoController | Select-Object -ExpandProperty Name\""
+            result = subprocess.run(cmd, capture_output=True, text=True,shell= True)
+            output = result.stdout.upper()
+            if "AMD" in output or "RADEON" in output:
+                return "AMD"
+            elif "NVIDIA" in output:
+                return "NVIDIA"
+            elif "INTEL" in output:
+                return "Intel"
+        except Exception:
+            pass
+        return "Generic" if NVIDIA_AVAILABLE else "N/A"
+
+    def get_gpu_usage(self):
+        # try through GPUtil
+        if NVIDIA_AVAILABLE:
+            try:
+                gpus = GPUtil.getGPUs()
+                if gpus:
+                    return int(gpus[0].load * 100)
+            except Exception:
+                pass
+
+        # try AMD / Win GPU performance counters via PowerShell
+        if os.name == 'nt':
+            try:
+                cmd = "powershell \"(Get-Counter '\\GPU Engine(*engtype_3D*)\\Utilization Percentage' -ErrorAction SilentlyContinue).CounterSamples | Measure-Object -Property CookedValue -Sum | Select-Object -ExpandProperty Sum\""
+                result =  subprocess.run(cmd, capture_output=True, text=True, shell=True)
+                val = float(result.stdout.strip())
+                return min(int(val), 100)
+            except Exception:
+                pass
+
+        return 0
 
     def apply_theme(self):
         t = THEMES[self.current_theme]
@@ -195,15 +243,7 @@ class ResourceMonitor:
         while self.running:
             cpu_usage = psutil.cpu_percent(interval=1)
             ram = psutil.virtual_memory()
-            
-            gpu_usage = 0
-            if GPU_AVAILABLE:
-                try:
-                    gpus = GPUtil.getGPUs()
-                    if gpus:
-                        gpu_usage = int(gpus[0].load * 100)
-                except Exception:
-                    pass
+            gpu_usage = self.get_gpu_usage()
 
             current_disk_io = psutil.disk_io_counters()
             read_speed = current_disk_io.read_bytes - last_disk_io.read_bytes
@@ -241,8 +281,8 @@ class ResourceMonitor:
         total_gb = ram.total // (1024**3)
         self.ram_label.config(text=f"RAM Usage: {ram_usage}% ({used_gb} GB / {total_gb} GB)")
 
-        if GPU_AVAILABLE:
-            self.gpu_label.config(text=f"GPU Usage: {gpu_usage}%")
+        if self.gpu_type != "N/A":
+            self.gpu_label.config(text=f"GPU Usage: ({self.gpu_type}): {gpu_usage}%")
         else:
             self.gpu_label.config(text="GPU Usage: N/A")
 
@@ -297,7 +337,7 @@ class ResourceMonitor:
             return f"{byte_value} B"
 
     def on_close(self):
-        self.running = False
+        self.running = native_running = False
         self.root.destroy()
 
 if __name__ == "__main__":
